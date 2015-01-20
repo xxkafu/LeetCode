@@ -1,0 +1,55 @@
+// Add Two Numbers
+// Solution:
+// this problem's solution is simple ,thus I don't give the steps
+// there are two tips:
+// 1. when add two list ,maybe there exits a carry at last .Be careful
+//
+// 2. this solution only cost 57ms pass all the tests. Before this solution, I write 
+//    another solution, which doesn't need "new" ListNode. Using l1 to be the return list
+//    and all the manipulation is processed on l1.In my preview, it would cost less time, but
+//    the result shows that the solution below is much faster(another is 236ms). 
+//    I still doesn't figure out the reason, anyone who knows the reason ,please tell me .
+//    Thanks in advance.
+class Solution {
+public:
+	ListNode *addTwoNumbers(ListNode *l1, ListNode *l2) {
+	   
+		int nCarry = 0;
+		ListNode* pReturn = new ListNode(0);
+		ListNode* pBefore = pReturn;
+		while (l1 != NULL || l2 != NULL)
+		{
+			ListNode* pNode = new ListNode(0);
+			
+			if (l1 == NULL)
+				pNode->val = l2->val + nCarry;
+			else
+				if (l2 == NULL)
+					pNode->val = l1->val + nCarry;
+				else
+					pNode->val = l1->val + l2->val + nCarry;
+
+			if (pNode->val >9)
+			{
+				pNode->val -= 10;
+				nCarry = 1;
+			}
+			else
+				nCarry = 0;
+            if(l1 != NULL)
+			    l1 = l1->next;
+			if(l2 != NULL)
+			    l2 = l2->next;
+			pBefore->next = pNode;
+			pBefore = pNode;
+		}
+
+		if (nCarry == 1)
+		{
+			pBefore->next = new ListNode(1);
+		}
+
+		return pReturn->next;
+
+	}
+};

@@ -1,0 +1,60 @@
+// Two Sum
+// Solution: 
+// S1: sort the number, smallest --> biggest
+// S2: using two pointers ,one points begin(), another points end();
+// S3: find the number values(num1,num2) which add up to make target
+// S4: iterate the origin vector to find the index of num1,num2
+class Solution {
+public:
+    vector<int> twoSum(vector<int> &number, int target) {
+        // get the origin vector copy
+        vector<int> numbers(number);
+
+        // sort the vector
+        sort(numbers.begin(),numbers.end());
+
+        int nSize = numbers.size();
+        int i = 0;
+        int j = nSize-1;
+        int num1 = 0;
+        int num2 = 0;
+
+        while(i<nSize)
+        {
+            if(numbers[i] + numbers[j] > target)
+                {
+                    j--;
+                    continue;
+                }
+            if(numbers[i]+numbers[j]<target)
+            {
+                i++;
+                continue;
+            }
+            if(numbers[i]+numbers[j]==target)
+            {
+                num1 = numbers[i];
+                num2 = numbers[j];
+                break;
+            }
+            
+        }
+
+        int count = 0; 
+        vector<int> nvReturn;
+        for(int i=0; i<nSize; ++i)
+        {
+            if(number[i]==num1||number[i]==num2)
+                {
+                    nvReturn.push_back(i+1);
+                    count++;
+                }
+            if(count == 2)
+            break;
+        }
+        return nvReturn;
+        
+    }
+};
+
+
