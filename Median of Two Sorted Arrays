@@ -1,0 +1,150 @@
+//Median of Two Sorted Arrays
+//Here I record two solutions. Solution 1 is my own solution , Solution 2 is found on the Internet
+//In my view , solution 1 only has one backward: more code line, which may result in more complicated
+//and hard to follow the programmer's thought
+//according to the LeetCode test , these two solution run equal fast
+
+
+//Solution1:
+//the thought is come from the binary search. Binary search the smaller array.
+//Change the larger arrays's index according to the Index of smaller array, which make sure
+//the median is within [nBiggerIndex,nSmallerIndex] or [nSmallerIndex, nBiggerIndex] .
+//Until the smaller array index can't change or pBig[BigIndex] == pSmall[SmallIndex] ,the process is end.
+
+class Solution {
+public:
+	double findMedianSortedArrays(int A[], int m, int B[], int n) {
+		int *pSmall = A;
+		int nSmallSize = m;
+		int *pBig = B;
+		int nBigSize = n;
+        // get the smaller array and the biger array
+	    if(m>n)
+		{
+		    swap(pSmall,pBig);
+		    swap(nSmallSize,nBigSize);
+		}
+
+
+		int nLargeLeft = (nBigSize - 1) / 2;
+		int nLargeRight = nBigSize / 2;
+		if (nSmallSize == 0)
+			return (pBig[nLargeLeft] + pBig[nLargeRight]) / 2.0;
+		int nSmallBegin = 0;
+		int nSmallEnd = nSmallSize - 1;
+        // set the binary search start point
+		int nSmallLeft = (nSmallBegin + nSmallEnd) / 2;
+		int nSmallRight = (nSmallBegin + nSmallEnd + 1) / 2;
+
+
+		while (pBig[nLargeLeft] + pBig[nLargeRight] != pSmall[nSmallLeft] + pSmall[nSmallRight])
+		{
+			if (pBig[nLargeLeft] + pBig[nLargeRight] < pSmall[nSmallLeft] + pSmall[nSmallRight])
+			{
+				nSmallEnd = nSmallLeft;
+			}
+			else
+				if (pBig[nLargeLeft] + pBig[nLargeRight] > pSmall[nSmallLeft] + pSmall[nSmallRight])
+				{
+				nSmallBegin = nSmallRight;
+				}
+
+			int LeftShift = nSmallLeft - (nSmallBegin + nSmallEnd) / 2;
+			int RightShift = nSmallRight - (nSmallBegin + nSmallEnd + 1) / 2;
+
+            // when the searh point doesn't change,it's the time to determine the median
+			if (LeftShift == 0 && RightShift == 0)
+			{
+                // the situation [x,...,x,N,x,...],[x,x,...,x,M,M+1,x,x,...]
+				if(nLargeLeft != nLargeRight)
+				{
+				    if(pSmall[nSmallLeft]<pBig[nLargeLeft])
+				        return  pBig[nLargeLeft];
+				    if(pSmall[nSmallRight]>pBig[nLargeRight])
+				        return pBig[nLargeRight];
+				    else
+				        return pSmall[nSmallLeft];
+				}
+                // the situation [x,...,N,N-1,x,...],[x,x,...,x,M,M+1,x,x,...]
+				else
+				{
+				    int num1= 0;
+				    int num2= 0;
+				    int* pSmaller=pSmall;
+				    int  nSmaller =nSmallLeft;
+				    int  nSmallerSize = nSmallSize;
+				    int* pBigger =pBig;
+				    int  nBigger = nLargeLeft;
+				    int  nBiggerSize = nBigSize;
+				    if(pSmall[nSmallLeft]>pBig[nLargeLeft])
+				    {
+				        swap(pSmaller,pBigger);
+				        swap(nSmaller,nBigger);
+				        swap(nSmallerSize,nBiggerSize);
+				    }
+				    
+				        if(nBigger-1>=0 && pBigger[nBigger-1]>pSmaller[nSmaller])
+				            num1 = pBigger[nBigger-1];
+				        else
+				            num1 = pSmaller[nSmaller];
+				        if(nSmaller+1<nSmallerSize && pSmaller[nSmaller+1]<pBigger[nBigger])
+				            num2 = pSmaller[nSmaller+1];
+				        else
+				            num2 = pBigger[nBigger];
+				        return (num1+num2)/2.0;
+				}
+
+			}
+			
+            // change the large array index according to the smaller array
+			int nLargeLeftTmp = nLargeLeft+RightShift;
+			int nLargeRightTmp= nLargeRight+LeftShift;
+			nLargeLeft = (nLargeLeftTmp+nLargeRightTmp)/2;
+			nLargeRight =(nLargeRightTmp+nLargeLeftTmp+1)/2;
+
+            // updata the smaller array index
+			nSmallLeft = (nSmallBegin + nSmallEnd) / 2;
+			nSmallRight = (nSmallBegin + nSmallEnd + 1) / 2;
+		}
+
+		return (pBig[nLargeLeft] + pBig[nLargeRight]) / 2.0;
+	}
+
+};
+
+//Solution2:
+//the solution2 's thoughts can be found on the Internet.Just Google
+class Solution {
+public:
+    double findKth(int A[],int m,int B[], int n, int kth)
+    {
+        if(m>n)
+            return findKth(B,n,A,m,kth);
+        
+        if(m==0)
+            return B[kth-1];
+        if(kth==1)
+            return min(A[0],B[0]);
+
+        int pA = min(kth/2,m); 
+        int pB = kth-pA;
+
+        if(A[pA-1] == B[pB-1])
+            return A[pA-1];
+        if(A[pA-1] > B[pB-1])
+            return findKth(A,m,B+pB,n-pB,kth-pB);   
+        else
+            return findKth(A+pA,m-pA,B,n,kth-pA);
+    }
+
+    double findMedianSortedArrays(int A[], int m, int B[], int n) {
+        int nTotalSize = m+n;
+        if(nTotalSize%2== 1)
+        {
+            return  findKth(A,m,B,n,nTotalSize/2+1);
+        }
+        else
+            return (findKth(A,m,B,n,nTotalSize/2) + findKth(A,m,B,n,nTotalSize/2+1))/2.0;
+        
+    }
+};

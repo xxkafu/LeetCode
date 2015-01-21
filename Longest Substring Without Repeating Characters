@@ -1,0 +1,58 @@
+//Longest Substring Without Repeating Characters
+//
+//Solution:
+//using two pointers ,one indicate the substring's begin (j)
+//another indicates the end of the substring(i).
+//First, move pointer i, until it reaches the repeating character.
+//Then , move the pointer j, until it reaches the repeating character,
+//and move forward one step. Now this time [i,j] is the new substring
+//without repeating characters.
+//
+//hashtable nvNumber is used to show if the character is duplicate or not.
+
+class Solution {
+public:
+
+    int lengthOfLongestSubstring(string s) {
+        int nSize = s.size();
+        int maxLength=0;
+
+        vector<int> nvNumber(256,0);
+		int i=0; 
+		int j=0;
+
+        for(;i<nSize; ++i)
+        {
+            // nvNumber[x] =1 indicate x is included in substring
+            if(nvNumber[s[i]] == 0)
+            {
+                nvNumber[s[i]] =1;
+            }
+            else
+                // now the substring has repeating character,this character is s[j]
+                {
+                    if((i-j)> maxLength)
+                        {
+                            maxLength =i-j;
+                            
+                        }
+                    // move i ,to exclude the repeating character
+                    while(s[j]!=s[i])
+                    {
+                        nvNumber[s[j]] = 0;
+                        j++;
+                        
+                    }
+                    j++;
+                    
+                    if(j+maxLength>=nSize)
+                        break;
+                }
+        }
+
+        if((i-j)>maxLength)
+            maxLength = i-j;
+        return maxLength;
+    }
+};
+
