@@ -1,0 +1,33 @@
+//solution
+//it is easy, every time get the MSB and LSB ,and compare these two
+//
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        int num =x;
+        if(num<0)
+            return false;
+        int base =1;    
+        while( num >9)
+        {
+            num /=10;
+            base *=10;
+        }
+        
+        while(base>1)
+        {
+            int lastNum = x%10; // the LSB
+            int FirstNum = x/base;// the MSB
+            if(FirstNum == lastNum)
+            {
+                x -=FirstNum * base;
+                x /=10;
+                base /=100;
+            }
+            else
+                return false;
+        }
+        return true;
+        
+    }
+};

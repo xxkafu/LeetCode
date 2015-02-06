@@ -1,0 +1,81 @@
+// solution 1
+//in order to deal with the overflow problem easily , i first turn the 
+//int to the string ,then reverse it ,compare the reversed string with the
+//INT_MAX , INT_MIN string .
+//
+class Solution {
+public:
+	int reverse(int x) {
+		if (x == 0)
+			return 0;
+		unsigned unsx = x > 0 ? x : -x;
+		ostringstream os;
+		os << unsx;
+		string str = os.str(); // turn the input x to string , if x <0 , make if postive
+                               // in order to do the swap easily
+		while (str.back() == '0')// deal 10000, reverse should be 1
+		{
+			str.pop_back();
+		}
+
+		for (int i = 0; i < str.size() / 2; i++)
+		{
+			swap(str[i], str[str.size() - 1 - i]);
+		}
+        
+		os.str("");
+		os << static_cast<unsigned int>(-INT_MIN);// in order not overflow,using the cast
+		string minint = os.str();
+		os.str("");
+		os << INT_MAX;
+		string maxint = os.str();
+		if (x > 0)
+		{
+			if (str.size()>maxint.size() 
+				|| (str.size()== maxint.size() && str > maxint))
+				return 0;
+			else
+				return stoi(str);
+		}
+		else
+		{
+			if (str.size()>minint.size()
+				|| (str.size() == minint.size() && str>minint))
+				return 0;
+			else
+				return -stoi(str);
+		}
+
+	}
+};
+
+//solution 2:
+//this solution is much simpler , it determine if the value is overflow before operation , instead ,using 
+//(INT_MAX-(x%10))/10, in this way ,we can easily solve the problem
+class Solution {
+public:
+    int reverse(int x) {
+        	
+		int nNewNum=0;
+		while(x != 0)
+		{
+		    if(x >0)
+		    {
+		        if((INT_MAX-(x%10))/10 >= nNewNum)
+		            nNewNum = nNewNum*10 + x%10;
+		        else
+		            return 0;
+		    }
+			else
+			{
+			    if((INT_MIN-(x%10))/10 <= nNewNum)
+			        nNewNum = nNewNum*10 +x%10;
+			    else
+			        return 0;
+			}
+			x/=10;
+		}
+			return nNewNum;
+        
+    }
+};
