@@ -1,0 +1,73 @@
+//solution:
+//the most important is to see if *(p+1) =='*'
+//if *(p+1)!='*',then *p must match *s
+//else  can *p match *s or *(p+2) match *s
+//the next point is  '.' can match every char, but it can't match '\0'
+//the solutions below deal : s="ab", p="a**b" as false
+//
+//compare solution 1 and solution 2
+//these two solution is the same way, solution 1 is solved by myself ,
+//the other is googled , in my opinion , solution 1 should be faster, as when *s==*p ,
+//I don't using recursion ,but the result shows the solution is faster, in Leetcode cases, the 
+//second is faster by 3ms
+//
+class Solution {
+public:
+    bool isMatch(const char *s, const char *p) {
+        while(*p !='\0')
+        {
+            if(*(p+1)!='*')// the current letter should match
+            {
+                 if(*s == *p || (*p=='.'&&*s!='\0')) 
+                {
+                    s++;
+                    p++;
+                }
+                else
+                    return false;
+            }
+            else
+            {
+                while(*s==*p || (*p=='.'&&*s!='\0'))// start match from *s and *(p+2)
+                {
+                    if(isMatch(s,p+2))
+                        return true;
+                    else
+                        s++;// backtracing
+                }
+                return isMatch(s,p+2);
+            }
+        }
+        return *s=='\0';
+    }
+};
+
+class Solution {
+public:
+	bool isMatch(const char *s, const char *p) {
+		if(*p=='\0') return *s=='\0';
+		
+		if(*(p+1) != '*')
+		{
+			if(*p == *s || (*p) == '.' && (*s) != 0)
+			{
+				return isMatch(s+1, p+1);
+			}
+			return false;
+		}
+		else
+		{
+			while(*p == *s || ((*p) == '.' && (*s) != 0))
+			{
+				if(isMatch(s, p + 2))
+				{
+					return true;
+				}
+				s++;
+			}
+			return isMatch(s, p + 2);
+
+		}
+		
+	}
+};

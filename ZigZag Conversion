@@ -1,0 +1,36 @@
+// solution:
+// this problem is mainly about the math problem ,
+// every row,start increasly by 1 ,s[0],s[1]...
+// and the next value is a function of nRows
+// if it is the first or the last row, it always increased by 2*(nRows-1);
+// others, increase by 2*(nRows-1-i_) and 2*i, alternatively
+//
+class Solution {
+public:
+	string convert(string s, int nRows) {
+		if (nRows == 1 || nRows >= s.size() )
+			return s;
+		string strReturn{};
+
+		for (int i = 0; i< nRows; i++)
+		{
+            // deal with every line's first character
+			strReturn.push_back(s[i]);
+			int nAdd = 2 * (nRows - 1 - i);
+			if (nAdd == 0)
+				nAdd += 2 * (nRows - 1);
+			int j = i + nAdd;
+            // deal with one line
+			while (j <s.size())
+			{
+				strReturn.push_back(s[j]);
+				nAdd = 2 * (nRows - 1) - nAdd;
+				if (nAdd == 0)
+					nAdd += 2 * (nRows - 1);
+				j += nAdd;
+			}
+		}
+		return strReturn;
+
+	}
+};

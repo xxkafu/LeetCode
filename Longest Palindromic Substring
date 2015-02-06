@@ -1,0 +1,85 @@
+//solution:
+//first,inorder to simplify this problem , add special char into the string. by this way,
+//then the Palindrome's length is odd. we can easy determine the center element;
+//
+//second, in order to make the complexity : O(N), when we determine the maxLength using i as the center,
+//we use the informaition of 0,1,2,...,i-1. for example: abacaba , when i = 5, we doesn't need to compare index of 4
+//and 6, as when i = 1 , we find s[0] =s[2],and when i - 3 , we find s[0] =s[6], s[2] = s[4] ,thus we can
+//aleardy know  s[4] =s[6].
+class Solution {
+public:
+    string longestPalindrome(string sOrigin) {
+        // ++++++ add the special character ' ' ,to make the Palindrome's length is odd
+        string s{};
+        for(int i=0; i<sOrigin.size(); i++)
+        {
+            s.push_back(' ');
+            s.push_back(sOrigin[i]);
+        }
+        s.push_back(' ');
+        //---------------------
+
+        vector<int> dp{};// to record the leftlimit Palindrome in center of s[i];
+        int nMid = 0; //  as the solutin says ,if we know i ,mid informaition ,we can know part information of 2*mid-i ;
+        int nLeftLimit =  0; // the leftest of nMid's Palindrome , everytime update nMid ,updata nLeftLimit;
+        int nRightLimit = 0;
+        int nMaxPalLeft = 0; // in order to return the maxlength
+        int nMaxPalRight = 0;
+        for(int i = 0; i<s.size(); i++)
+        {
+            // in this case ,to deal : cabac , when determine the s[3] ,we don't need to compare a'left and a'right
+            if( i< nRightLimit && dp[2*nMid-i]>nLeftLimit )
+            {   
+                int distance = 2*nMid-i - dp[2*nMid-i];
+                dp.push_back(i-distance);
+            }
+            else
+            {
+                int nLeft;
+                int nRight;
+                if(i >=nRightLimit) // if this case ,there is no information to used 
+                {
+                    nLeft = i-1;
+                    nRight = i+1;
+                }
+                else  // in this case,to deal: bababa, when determine the s[3], we don't need to comapre s[2],s[4],we direct compare s[1],s[5]  
+                {
+                    nLeft = 2*i-nRightLimit;
+                    nRight = nRightLimit;
+                }
+
+                while(nLeft >=0 && nRight <s.size())
+                {
+                    if(s[nLeft] == s[nRight])
+                    {
+                        nLeft--;
+                        nRight++;
+                    }
+                    else
+                        break;
+                }
+                nMid = i;
+                nLeftLimit = nLeft +1;
+                nRightLimit = nRight-1;
+                dp.push_back(nLeftLimit);
+                
+                // updata the max len Palindrome information
+                if((nRightLimit - nLeftLimit) > (nMaxPalRight - nMaxPalLeft))
+                {
+                    nMaxPalLeft = nLeftLimit;
+                    nMaxPalRight = nRightLimit;
+                }
+            }
+        }
+        
+        // return the longest Palindrome
+        string sReturn{};
+        for(int i = nMaxPalLeft; i<=nMaxPalRight; i++)
+        {
+            if(s[i]!=' ')
+                sReturn.push_back(s[i]);
+        }
+        return sReturn;
+        
+    }
+};
