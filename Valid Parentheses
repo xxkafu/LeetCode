@@ -1,0 +1,34 @@
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> match;
+
+        for(int i=0; i<s.size(); i++) {
+            switch(s[i]) {
+                case '(':
+                case '[':
+                case '{': match.push(s[i]);break;
+                case ')': if(!match.empty() && match.top() =='(')
+                              match.pop();
+                          else
+                              return false;
+                          break;
+                case ']': if(!match.empty() && match.top() =='[')
+                              match.pop();
+                          else
+                              return false;
+                          break;
+                case '}': if(!match.empty() && match.top() =='{')
+                              match.pop();
+                          else
+                              return false;
+                          break;
+            } 
+        }
+        if(match.empty())
+            return true;
+        else
+            return false;
+        
+    }
+};

@@ -1,0 +1,30 @@
+class Solution {
+public:
+    ListNode *partition(ListNode *head, int x) {
+        ListNode *nullhead = new ListNode(-1);
+        nullhead ->next = head;
+        ListNode *p1= nullhead;
+        //ListNode *p2= nullhead;// the faster
+            while(p1->next!=NULL) {
+                if(p1->next->val<x)
+                    p1 = p1->next;
+                else
+                    break;
+            }
+            ListNode *p2 = p1;
+            while(p2->next!=NULL){
+                if(p2->next->val>=x)
+                    p2= p2->next;
+                else {
+                    ListNode *p1Tmp = p1->next;
+                    ListNode *p2Tmp = p2->next;
+                    p2->next = p2Tmp->next;
+                    p1->next = p2Tmp;
+                    p2Tmp->next = p1Tmp;
+                    p1 = p1->next;
+                }
+            }
+            
+            return nullhead->next;
+    }
+};

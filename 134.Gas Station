@@ -1,0 +1,29 @@
+// 
+// solution
+// easy
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        vector<int> dp;
+        for(int i=0; i<gas.size();i++){
+            dp.push_back(gas[i]-cost[i]);
+        }
+        
+        int sum=0;
+        int profit=0;
+        int startPoint=0;
+        for(int i=0; i<dp.size();i++){
+            profit+=dp[i];
+            sum+=dp[i];
+            if(profit<0){
+                startPoint=i+1;
+                profit=0;
+            }
+        }
+        if(sum<0)
+            return -1;
+        else
+            return startPoint;
+        
+    }
+};

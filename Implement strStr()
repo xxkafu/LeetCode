@@ -1,0 +1,36 @@
+class Solution {
+public:
+	int strStr(char *haystack, char *needle) {
+
+		int patlength = strlen(needle);
+		vector<int> next(patlength, -1);
+		helper(needle, next);
+		int i = 0;
+		int j = 0;
+		while (haystack[i] != '\0' && j<patlength) {
+			if (j == -1 || haystack[i] == needle[j]) {
+				j++;
+				i++;
+			}
+			else
+				j = next[j];
+		}
+		if (needle[j] == '\0')
+			return i - patlength;
+		else
+			return -1;
+	}
+	void helper(char *needle, vector<int> &next) {
+		int j = 0;
+		int k = -1;
+		while (needle[j+1] != '\0') {
+			if (k == -1 || needle[j] == needle[k]) {
+				k++;
+				j++;
+				next[j] = k;
+			}
+			else
+				k = next[k];
+		}
+	}
+};

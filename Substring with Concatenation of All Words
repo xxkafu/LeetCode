@@ -1,0 +1,52 @@
+class Solution {
+public:
+    vector<int> findSubstring(string S, vector<string> &L) {
+        int lSize = L[0].size();
+        int sSize = S.size();
+        vector<int> res;
+        unordered_map<string,int> lhash;
+        unordered_map<string,int> shash;
+
+        for(int i=0; i<L.size(); i++) {
+            if(lhash.find(L[i]) == lhash.end())
+                lhash[L[i]]=0;
+            else
+                lhash[L[i]]++;
+        }
+
+        for(int i=0; i<lSize; i++) {
+            int nLeft = i;
+            int nRight= i;
+            int nGetNum = 0;
+            shash.clear();
+            while(nRight<sSize-lSize) {
+                string newStr = string(S,nRight,lSize);
+                nRight +=lSize;
+                if(lhash.find(newStr) != lhash.end()) {
+                    if(shash.find(newStr) == shash.end())
+                        shash[newStr] = 0;
+                    else
+                        shash[newStr]++;
+                    nGetNum++;
+                    while(shash[newStr]>lhash[newStr]) {
+                        shash[string(S,nLeft,lSize)]--;
+                        nGetNum--;
+                        nLeft +=lSize;
+                    }
+                }
+                else {
+                    nLeft = nRight;
+                    nGetNum =0;
+                    shash.clear();
+                }
+                if(nGetNum == L.size()) {
+                    res.push_back(nLeft);
+                    shash[string(S,nLeft,lSize)]--;
+                    nGetNum--;
+                    nLeft +=lSize;
+                }
+            }
+        }
+        return res;
+    }
+};

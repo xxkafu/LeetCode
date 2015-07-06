@@ -1,0 +1,39 @@
+// solution:
+// easy
+class Solution {
+public:
+    int findPeakElement(const vector<int> &num) {
+        
+        int nBegin = 0;
+        int nEnd = num.size()-1;
+        return findPeakOP(num,nBegin,nEnd);
+        
+    }
+    
+    int findPeakOP(const vector<int> &num, int nBegin,int nEnd)
+    {
+        if(nBegin == nEnd)
+        {
+            return nBegin;
+        }
+        else
+            if(nBegin+1== nEnd)
+            {
+                if(num[nBegin]>num[nEnd])
+                    return nBegin;
+                else    
+                    return nEnd;
+            }
+            else
+            {
+                int maxLeft = findPeakOP(num,nBegin,nBegin+(nEnd-nBegin)/2);
+                int maxRight = findPeakOP(num,nBegin+(nEnd-nBegin)/2,nEnd);
+                if(num[maxLeft]>num[maxRight])
+                    return maxLeft;
+                else    
+                    return maxRight;
+            }
+            
+    }
+};
+

@@ -1,0 +1,49 @@
+class Solution {
+public:
+    vector<int> searchRange(int A[], int n, int target) {
+        int left = 0;
+        int right = n-1;
+        vector<int> res(2,-1);
+        while(left<=right) {
+            int middle = (left+right)/2;
+            if(A[middle] == target) {
+                resl = middle;
+                resr = middle;
+                findleft(A,left,middle-1,target,resl);
+                findright(A,middle+1,right,target,resr);
+                res[0]=resl;
+                res[1]=resr;
+                return res;
+            }
+            else {
+                if(target<A[middle])
+                    right = middle-1;
+                else
+                    left = middle+1;
+            }
+        }
+        return res;
+    }
+    void findleft(int A[],int left,int right,int target, int &resl) {
+        while(left<=right) {
+            int middle = (left+right)/2;
+            if(A[middle]!=target)
+                left = middle+1;
+            else {
+                resl = middle;
+                right = middle-1;
+            }
+        }
+    }
+    void findright(int A[],int left,int right,int target, int &resr) {
+        while(left<=right) {
+            int middle = (left+right)/2;
+            if(A[middle]!=target)
+                right = middle-1;
+            else {
+                resl = middle;
+                right = middle+1;
+            }
+        }
+    }
+};

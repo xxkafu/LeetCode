@@ -1,0 +1,19 @@
+class Solution {
+public:
+    void sortColors(int A[], int n) {
+        int indexZero = -1;
+        int indexTwo = n;
+        
+        for(int index = indexZero+1 ; index<indexTwo;index++) {
+            if(A[index] == 0){
+                swap(A[++indexZero],A[index]);
+            }
+            if(A[index] == 2) {
+                swap(A[--indexTwo],A[index]);
+                index--;
+            }
+        }
+        
+        
+    }
+};

@@ -1,0 +1,58 @@
+class Solution {
+public:
+    vector<string> fullJustify(vector<string> &words, int L) {
+        vector<string> res;
+        int begin =0;
+        while(begin<words.size()) {
+            int charNum = 0;//处理后，一行所已经拥有的字符
+            int end = begin;
+            while(end<words.size()) { // 确定该行所应该有的起始单词和最终单词
+                int occupyNum = charNum+end-begin;//一行所已经占据的字符(charNum+spaceNum)
+                if(occupyNum+words[end].size()<=L){
+                    charNum +=words[end].size();
+                    end++;
+                }
+                else
+                    break;
+            } // end 所在的字符串是不能进入该行的
+            if(end == words.size()) { // 处理最后一行
+                int i = 0;
+                string tmp;
+                while(i<L){
+                    if(begin<end){ 
+                        tmp +=words[begin];
+                        i += words[begin].size();
+                        begin++;
+                    }
+                    if(i<L) {
+                        tmp +=" ";
+                        i++;
+                    }
+                }
+                res.push_back(tmp);
+            }
+            else {// 处理普通行
+                int spaceNum = L-charNum;
+                string tmp = words[begin];
+                if(begin+1 == end) { // 当某行只能放下一个单词时
+                    tmp +=string(spaceNum,' '); 
+                }
+                else {
+                    int evenSpace = spaceNum/(end-begin-1);
+                    int extrSpace = spaceNum%(end-begin-1);
+                    for(int i= begin+1; i<end; i++) {
+                        tmp +=string(evenSpace,' ');
+                        if(extrSpace!=0){
+                            tmp+=" ";
+                            extrSpace--;
+                        }
+                        tmp +=words[i];
+                    }
+                }
+                res.push_back(tmp);
+            }
+            begin = end;
+        }
+        return res;
+    }
+};

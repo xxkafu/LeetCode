@@ -1,0 +1,67 @@
+class Solution {
+public:
+	vector<vector<string> > findLadders(string start, string end, unordered_set<string> &dict) {
+		unordered_map<string, unordered_set<string>> graph;
+		dict.insert(start);
+		dict.erase(end);
+		int minStep = ladderLength(start, end, dict, graph);
+		vector<vector<string>> res;
+		vector<string> path;
+		helper(start, end, graph, minStep, res, path);
+		return res;
+	}
+
+	int ladderLength(string beginWord, string endWord, unordered_set<string>& wordDict, unordered_map<string, unordered_set<string>>& graph){
+		int res = 1;
+		queue<string> bot;
+		bot.push(endWord);
+		unordered_set<string> hasItr;
+		while (!bot.empty()) {
+			int size = bot.size();
+			res++;
+			unordered_set<string> hasItrTmp=hasItr;
+			for (int i = 0; i<size; i++) {
+				{// find next step
+					string fatherWord = bot.front();
+					for (int wordIndex = 0; wordIndex<bot.front().size(); wordIndex++){
+						char orginChar = fatherWord[wordIndex];
+						for (char ch = 'a'; ch <= 'z'; ch++){
+							fatherWord[wordIndex] = ch;
+							auto itr = wordDict.find(fatherWord);
+							if(itr!=wordDict.end()&&hasItrTmp.find(fatherWord)==hasItrTmp.end()){
+									graph[fatherWord].insert(bot.front());
+							        if(hasItr.find(fatherWord)==hasItr.end()){
+							            bot.push(fatherWord);
+							            hasItr.insert(fatherWord);
+							        }
+							}
+						}
+						fatherWord[wordIndex] = orginChar;
+					}
+					bot.pop();
+				}
+			}
+			if(hasItr.find(beginWord)!=hasItr.end())
+				return  res;
+		}
+		return 0;
+	}
+
+	void helper(string beginWord, string endWord, unordered_map<string, unordered_set<string>>&graph, int minStep,
+		vector<vector<string>>& res, vector<string>& path)
+	{
+			path.push_back(beginWord);
+			if (beginWord == endWord)
+				res.push_back(path);
+			else{
+				unordered_set<string>& levelWord = graph[beginWord];
+				for (auto itr = levelWord.begin(); itr != levelWord.end(); itr++){
+					helper(*itr, endWord, graph, minStep - 1, res, path);
+				}
+			}
+			path.pop_back();
+	}
+	
+
+};
+

@@ -1,0 +1,30 @@
+//solution:
+// 当交易次数大于等于所在天数时，可以特殊处理(helper)
+// 不然，则用DP方法
+class Solution {
+public:
+    int maxProfit(int k, vector<int> &prices) {
+        if(k>=prices.size())
+            return helper(prices);
+        int rowSize=prices.size();
+        int colSize=k+1;
+        vector<int> localProfit(colSize);
+        vector<int> globalProfit(colSize);
+        
+        for(int i=1; i<rowSize;i++){
+            int diff=prices[i]-prices[i-1];
+			for(int j=min(i,k);j>0;j--)
+			{
+				localProfit[j]=max(localProfit[j]+diff,globalProfit[j-1]+max(diff,0));
+				globalProfit[j]=max(globalProfit[j],localProfit[j]);
+			}
+		}
+        return globalProfit[colSize-1];
+    }
+    int helper(vector<int> prices){
+        int res=0;
+        for(int i=1; i<prices.size();i++)
+            res+=max(0,prices[i]-prices[i-1]);
+        return res;
+    }
+};

@@ -1,0 +1,18 @@
+// easy
+class Solution {
+public:
+    string convertToTitle(int n) {
+        stack<char> bot;
+        while(n>0){
+            bot.push('A'+(n-1)%26);
+            n=(n-1)/26;
+        }
+        string str;
+        while(!bot.empty()){
+            str.push_back(bot.top());
+            bot.pop();
+        }
+        return str;
+        
+    }
+};

@@ -1,0 +1,70 @@
+//掌握了Trie后，这些搜索都是很简单
+class node{
+public:
+    node(){
+        isWord=false;
+        for(int i=0; i<26;i++)
+            child[i]=NULL;
+    }
+    bool isWord;
+    node* child[26];
+};
+
+class WordDictionary {
+public:
+    WordDictionary(){
+        root= new node();
+    }
+    
+    // Adds a word into the data structure.
+    void addWord(string word) {
+        node* ptr= root;
+        for(int i=0;i<word.size();i++){
+            if(ptr->child[word[i]-'a']==NULL)
+                ptr->child[word[i]-'a']=new node();
+            ptr = ptr->child[word[i]-'a'];
+        }
+        ptr->isWord= true;
+    }
+
+    // Returns if the word is in the data structure. A word could
+    // contain the dot character '.' to represent any one letter.
+    bool search(string word) {
+        node* ptr = root;
+        return help(ptr,word);
+    }
+    node* root;
+private:
+    bool help(node* ptr, string word){
+        if(ptr==NULL)
+            return false;
+        if(word.size()==0){
+            return ptr->isWord;
+        }
+        
+        for(int i=0;i<word.size();i++){
+            if(word[i]=='.'){
+                for(int j=0;j<26;j++){
+                    if(ptr->child[j]&&help(ptr->child[j],string(word,i+1)))
+                        return true;
+                }
+                return false;
+            }
+            else{
+                if(ptr->child[word[i]-'a']==NULL)
+                    return false;
+                else{
+                    ptr=ptr->child[word[i]-'a'];
+                }
+            }
+        }
+        return ptr->isWord;
+    }
+    
+};
+
+
+// Your WordDictionary object will be instantiated and called as such:
+// WordDictionary wordDictionary;
+// wordDictionary.addWord("word");
+// wordDictionary.search("pattern");

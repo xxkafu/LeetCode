@@ -1,0 +1,53 @@
+//solution
+//this is solved by myself. and the general thought is similar to the 3Sum
+//however through the pair ,we can first using the 2Sum,however this condition
+//is complicated in coding , the most challenge part is when find pair1 +pair2 == target
+//we have to find out if the element in the pair is duplicate
+//
+class Solution {
+public:
+    vector<vector<int> > fourSum(vector<int> &num, int target) {
+
+        vector<int> triple(4);
+        vector<vector<int> > matchVector;
+        sort(num.begin(),num.end());//
+
+        for(int i= 0; i<num.size(); i++) {
+            if(i==0 || num[i]!=num[i-1]) {//make the first elemment of triple is unique
+                for(int secIndex = i+1;secIndex<num.size();secIndex++){
+                    if(secIndex == i+1 || num[secIndex] != num[secIndex-1]) {
+                    int begin= secIndex+1;
+                    int end= num.size()-1;
+                    while(begin <end) {// 
+                        if(num[i]+num[secIndex] + num[begin] + num[end] == target) {
+                            triple[0] =num[i] ;
+                            triple[1] =num[secIndex] ;
+                            triple[2] =num[begin] ;
+                            triple[3] =num[end] ;
+                            matchVector.push_back(triple);
+                            while(begin<end && num[begin+1] == num[begin])// find the unique second element
+                                    begin++;
+                                    begin++;// locate the second element
+                            while(begin<end && num[end-1] == num[end]) // find the unique third element
+                                    end--;
+                                    end--;// locate the third element
+                        }
+                        else
+                            if(num[begin]+num[end]<target-num[i]-num[secIndex]) {
+                               while(begin<end && num[begin+1] == num[begin]) 
+                                   begin++;
+                                   begin++;
+                            }
+                            else  {
+                                while(begin<end && num[end-1] == num[end])
+                                    end--;
+                                    end--;
+                            }
+                    }
+                    }
+                }
+            }
+        }
+        return matchVector;
+    }
+};

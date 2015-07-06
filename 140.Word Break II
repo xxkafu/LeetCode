@@ -1,0 +1,58 @@
+// solution: 
+// 先用word break的方法切割string，可以得出每位是否是可以切割
+// 然后用递归的方法，进行统计
+// 这里需要进行剪枝
+//
+class Solution {
+public:
+    vector<string> wordBreak(string s, unordered_set<string>& wordDict) {
+        vector<string> res;
+        string item;
+        vector<int> dp(s.size(),-1);//dp[i]: s[0:i] is wordbreak
+        for(int i=0;i<s.size();i++){
+            if(wordDict.count(string(s,0,i+1))){
+                dp[i]=1;
+                continue;
+            }
+            for(int j=0;j<i;j++){
+                string sTmp(s,j+1,i-j);
+                if(wordDict.count(sTmp)&&dp[j]){
+                    dp[i] = 1;
+                    break;
+                }
+            }
+            if(dp[i]==-1)
+                dp[i]=0;
+        }
+        int startPoint=0;
+        int endPoint = s.size();
+        return helper(s,startPoint,endPoint,wordDict,dp);
+    }
+    
+    vector<string>  helper(string s, int startPoint,int endPoint, unordered_set<string>& wordDict,vector<int> &dp) {
+        vector<string> res;
+        string item(s,startPoint,endPoint);
+        if(wordDict.find(item)!=wordDict.end()){
+            if(endPoint==s.size())
+                res.push_back(item);
+            else
+                res.push_back(item+" ");
+        }
+        for(int i=startPoint+1;i<endPoint;i++){
+            string sTmp(s,i,endPoint-i);
+            vector<string> preRes;
+            if(wordDict.find(sTmp)!=wordDict.end()&&dp[i-1]){// 剪枝，必须在i点前后都是可以切割的，才进行递归
+                preRes=helper(s,startPoint,i,wordDict,dp);
+            }
+            string sPush=sTmp;
+            if(endPoint!=s.size()){
+                sPush+=" ";
+            }
+            for(int k=0;k<preRes.size();k++){
+               res.push_back(preRes[k]+sPush);
+            }
+        }
+        return res;
+    }
+    
+};

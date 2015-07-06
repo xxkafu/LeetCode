@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int minimumTotal(vector<vector<int> > &triangle) {
+        vector<int> dp(triangle.size());
+        for(int i=0; i<triangle.size();i++) {
+            for(int j=i; j>=0;j--){
+                if(j==0)
+                    dp[j]=triangle[i][j]+dp[j];
+                else
+                    if(j==i)
+                        dp[j]=triangle[i][j]+dp[j-1];
+                    else{
+                        int num=min(dp[j],dp[j-1]);
+                        dp[j]=triangle[i][j]+num;
+                    }
+            }
+        }
+        if(dp.size()==0)
+            return 0;
+        int res=dp[0];
+        for(int i=1;i<dp.size();i++){
+            if(dp[i]<res)
+                res=dp[i];
+        }
+        return res;
+        
+    }
+};

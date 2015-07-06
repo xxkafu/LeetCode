@@ -1,0 +1,50 @@
+// solution:
+// 去掉头部，尾部，中间的多余的空格
+// 直接翻转
+// 对每个word进行再次翻转
+class Solution {
+public:
+    void reverseWords(string &s) {
+        // find the first;
+        auto itr=s.begin();
+        while(itr!=s.end()){
+            if(*itr==' ')
+                itr=s.erase(itr);
+            else
+                break;
+        }
+        while(itr!=s.end()){
+            if(*itr!=' ')
+                itr++;
+            else{
+                itr++;
+                while(itr!=s.end()){
+                    if(*itr==' ')
+                        itr=s.erase(itr);
+                    else
+                        break;
+                }
+            }
+        }
+        if(s.back()==' ')
+            s.pop_back();
+       
+        for(int i=0; i<s.size()/2;i++)
+            swap(s[i],s[s.size()-i-1]);
+        
+        int start=0;
+        int end=0;
+        while(start<s.size()){
+            end =start;
+            while(end<s.size()&&s[end]!=' ')
+                end++;
+            if(start>=end)
+                break;
+            for(int i=start,j=end-1;i<j;i++,j--)
+                swap(s[i],s[j]);
+            start = end+1;
+        }
+        
+    }
+};
+

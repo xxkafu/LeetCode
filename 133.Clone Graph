@@ -1,0 +1,44 @@
+// solution:
+// easy
+/**
+ * Definition for undirected graph.
+ * struct UndirectedGraphNode {
+ *     int label;
+ *     vector<UndirectedGraphNode *> neighbors;
+ *     UndirectedGraphNode(int x) : label(x) {};
+ * };
+ */
+class Solution {
+public:
+    UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
+        if(node==NULL)
+            return node;
+        
+        UndirectedGraphNode* newNode= new UndirectedGraphNode(node->label);
+        queue<UndirectedGraphNode*> oribot;
+        queue<UndirectedGraphNode*> newbot;
+        unordered_map<int,UndirectedGraphNode*> hash;
+        hash[newNode->label]=newNode;
+        oribot.push(node);
+        newbot.push(newNode);
+        while(!oribot.empty()){
+            UndirectedGraphNode* oriSource=oribot.front();
+            UndirectedGraphNode* newSource=newbot.front();
+            vector<UndirectedGraphNode *> oriNeis=oriSource->neighbors;
+            for(int i=0; i<oriNeis.size();i++){
+                UndirectedGraphNode* oriNei=oriNeis[i];
+                if(hash.find(oriNei->label)==hash.end()){
+                    UndirectedGraphNode* newNei= new UndirectedGraphNode(oriNei->label);
+                    oribot.push(oriNei);
+                    newbot.push(newNei);
+                    hash[newNei->label]=newNei;
+                }
+                (newSource->neighbors).push_back(hash[oriNei->label]);
+            }
+            oribot.pop();
+            newbot.pop();
+        }
+        return newNode;
+        
+    }
+};

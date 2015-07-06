@@ -1,0 +1,29 @@
+// solution:
+// 因为要找到多于一半的数
+// 所以先选定一个数，当出现跟这个数不一样的数时，cnt--
+// 如果出现跟这个数一样的，则cnt++
+// 如果cnt==0，说明这个数暂时失去了资格
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int res;
+        int cnt=0;
+        for(int i=0; i<nums.size();i++){
+            if(cnt==0){
+                res=nums[i];
+                cnt++;
+            }
+            else{
+                if(res!=nums[i])
+                    cnt--;
+                else
+                    cnt++;
+                if(cnt>nums.size()/2)
+                    return res;
+            }
+        }
+        return res;
+        
+    }
+};
+

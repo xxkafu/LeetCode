@@ -1,0 +1,28 @@
+class Solution {
+public
+    vectorvectorint  subsetsWithDup(vectorint &S){
+        vectorint tmp;
+        vectorvectorint  res;
+        sort(S.begin(),S.end());
+        helper(0,S, tmp,res);
+        return res;
+    }
+    
+    void helper(int index, vectorint &S, vectorint &tmp , vectorvectorint  &res) {
+        res.push_back(tmp);
+        bool judge = false;
+        char origin;
+        for(int i = index; iS.size(); i++) {
+            if(judge == true && origin == S[i]) {
+                continue;
+            }
+            else {
+                tmp.push_back(S[i]);
+                helper(i+1,S,tmp,res);
+                origin = tmp.back();
+                judge = true;
+                tmp.pop_back();
+            }
+        }
+    }
+};

@@ -1,0 +1,26 @@
+class Solution {
+public:
+    static bool compare(Interval& a, Interval& b) {//这个函数的参数不能变，如果没有static，则
+    //编译器会加入this指针产生出错
+            return a.start<b.start;//这个地方变成小于等于的时候，时间会变大,因为sort要求严格弱序，strict weak ordering
+    }
+    vector<Interval> merge(vector<Interval> &intervals) {
+        sort(intervals.begin(),intervals.end(),compare);
+        int size = intervals.size();
+        if(size<=1)
+            return intervals;
+        vector<Interval> res;
+        Interval tmp = intervals[0];
+        for(int i=1; i<size; i++) {
+            if(tmp.end<intervals[i].start) {
+                res.push_back(tmp);
+                tmp = intervals[i];
+            }
+            else {
+                tmp.end = max(tmp.end, intervals[i].end);
+            }
+        }
+        res.push_back(tmp);
+        return res;
+    }
+};

@@ -1,0 +1,21 @@
+// easy
+class Solution {
+public:
+    int trailingZeroes(int n) {
+        size_t twoTimes=0;
+        size_t twoLimit =2;
+        while(twoLimit<=n){
+            twoTimes+=n/twoLimit;
+            twoLimit*=2;
+        }
+        size_t fiveTimes=0;
+        size_t fiveLimit=5;
+        while(fiveLimit<=n){
+            fiveTimes+=n/fiveLimit;
+            fiveLimit*=5;
+        }
+        return min(twoTimes,fiveTimes);
+        
+    }
+};
+

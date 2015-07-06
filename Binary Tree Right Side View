@@ -1,0 +1,36 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+// Solution:request is to see the right side value, then ,we can do the preorder iteration 
+// as the right child is later accessed than left child 
+// the code is as below
+class Solution {
+public:
+    vector<int> rightSideView(TreeNode *root) {
+        vector<int> res;
+        helper(root,res,0);
+        return res;
+    }
+    
+    void helper(TreeNode *root, vector<int> &res, int index) {
+        if(root !=NULL) {
+            if(index == res.size()) {
+                res.push_back(root->val);
+                index++;
+            }
+            else {
+                    res[index] = root->val;
+                    index++;
+            }
+                
+            helper(root->left,res,index);
+            helper(root->right,res,index);
+        }
+    }
+};

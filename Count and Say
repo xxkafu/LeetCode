@@ -1,0 +1,36 @@
+class Solution {
+public:
+    string countAndSay(int n) {
+        queue<int> num;
+        num.push(1);
+        int match=-1;
+        int count=0;
+        int times=0;
+        while(times<n) {
+            if(num.front()==match) {
+                count++;
+                num.pop();
+            }
+            else {
+                if(match==-1) {
+                    num.push(-1);
+                    times++;
+                }
+                else {
+                    num.push(count);
+                    num.push(match);
+                }
+                match = num.front();
+                count=0;
+            }
+        }
+        string res;
+        while(!num.empty()) {
+            if(num.front()!=-1) {
+                res.push_back(num.front()+'0');
+            }
+            num.pop();
+        }
+        return res;
+    }
+};

@@ -1,0 +1,62 @@
+class Solution {
+public:
+    void solveSudoku(vector<vector<char> > &board) {
+        vector<vector<int> > row(9,vector<int>(9,0));
+        vector<vector<int> > col(9,vector<int>(9,0));
+        vector<vector<int> > box(9,vector<int>(9,0));
+        vector<int> updataIndex;
+        // the box destribution: 
+        // 0,1,2
+        // 3,4,5
+        // 6,7,8
+        for(int i=0; i<9; i++) {
+            for(int j=0; j<9;j++) {
+                if(board[i][j] == '.') {
+                    updataIndex.push_back(10*i+j);
+                    board[i][j]='0';
+                }
+                else {
+                    int key = board[i][j]-'1';
+                    row[i][key]=1;
+                    col[j][key]=1;
+                    box[i/3*3+j/3][key]=1;
+                }
+            }
+        }
+
+        int index = 0;
+        while(index<updataIndex.size()) {
+            int updataRow= updataIndex[index]/10;
+            int updataCol= updataIndex[index]%10;
+            int updataBox= updataRow/3*3+updataCol/3;
+            int originVal= board[updataRow][updataCol]=='0'?-1:board[updataRow][updataCol]-'1';
+            bool rowPass=false;
+            bool colPass=false;
+            bool boxPass=false;
+            if(board[updataRow][updataCol]!='0') {
+                row[updataRow][originVal]=0;
+                col[updataCol][originVal]=0;
+                box[updataBox][originVal]=0;
+            }
+            do {
+                if(board[updataRow][updataCol]=='9') {
+                    board[updataRow][updataCol]='0';
+                    break;
+                }
+                ++board[updataRow][updataCol];
+                ++originVal;
+                rowPass=row[updataRow][originVal]==0;
+                colPass=col[updataCol][originVal]==0;                
+                boxPass=box[updataBox][originVal]==0;          
+            }while(!(rowPass && colPass && boxPass ));
+            if(rowPass && colPass && boxPass){
+                index++;
+                row[updataRow][originVal]=1;
+                col[updataCol][originVal]=1;
+                box[updataBox][originVal]=1;
+            }
+            else
+                index--;
+        }
+    }
+};

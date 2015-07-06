@@ -1,0 +1,35 @@
+// this solution is similar to the 3Sum .
+class Solution {
+public:
+    int threeSumClosest(vector<int> &num, int target) {
+        sort(num.begin(),num.end());
+        int minSum3 = num[0]+num[1]+num[2]-target;
+        for(int i= 0; i<num.size(); i++) {
+            if(i==0 || num[i]!=num[i-1]) {//make the first elemment of triple is unique
+                int firstElement = num[i];
+                int begin = i+1; // determine the second element's start point
+                int end = num.size()-1;// determint the third element's end point
+                while(begin <end) {// 
+                    int sum3= num[begin]+num[end]+firstElement-target;
+                    if(sum3 == 0) 
+                       return target;
+                    else {
+                         if(sum3<0) {
+                            while(begin<end && num[begin+1] == num[begin]) 
+                                begin++;
+                                begin++;
+                         }
+                         else  {
+                             while(begin<end && num[end-1] == num[end])
+                                 end--;
+                                 end--;
+                         }
+                    }
+                   if(abs(sum3)<abs(minSum3))
+                       minSum3 = sum3;
+                }
+        }
+        }
+         return target+minSum3;
+    }
+};

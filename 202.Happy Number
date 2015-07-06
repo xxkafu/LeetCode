@@ -1,0 +1,23 @@
+// solution:
+// easy
+class Solution {
+public:
+    bool isHappy(int n) {
+        unordered_set<int> col;
+        col.insert(n);
+        while(1){
+            if(n==1)
+                return true;
+            int tmp=0;
+            while(n>0){
+                tmp+=(n%10)*(n%10);
+                n/=10;
+            }
+            if(col.find(tmp)!=col.end())
+                return false;
+            col.insert(tmp);
+            n=tmp;
+        }
+    }
+};
+

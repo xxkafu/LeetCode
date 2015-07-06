@@ -1,0 +1,39 @@
+//solution:
+//A--> 00
+//C--> 01
+//G--> 02
+//T--> 03
+
+class Solution {
+public:
+	vector<string> findRepeatedDnaSequences(string s) {
+
+		int flag = 0;
+		int mask = 0xfffff;
+		int hash[0xfffff]{0};
+		vector<string> dupstring;
+		for (int i = 0; i<s.size(); i++)
+		{
+			switch (s[i]) {
+			case 'A': flag = (flag << 2) ; break;
+			case 'C': flag = (flag << 2) | 1; break;
+			case 'G': flag = (flag << 2) | 2; break;
+			case 'T': flag = (flag << 2) | 3; break;
+			}
+			flag &= mask;
+			if (i >=9)
+			{
+			    if(hash[flag]<2)
+                {
+                    if(hash[flag]==1) {
+			            string strtmp(s, i - 9, 10);
+					    dupstring.push_back(strtmp);
+                    }
+                    hash[flag]++;
+                }
+			}
+		}
+
+		return dupstring;
+	}
+};

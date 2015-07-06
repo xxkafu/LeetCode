@@ -1,0 +1,40 @@
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        int asize = a.size(); 
+        int bsize = b.size();
+        string tmp(max(asize,bsize)+1,'0');
+        int index = 0;
+        int carry = 0;
+        int i= asize-1;
+        int j= bsize-1;
+        for(; i>=0&&j>=0; i--,j--) {
+            int digita = a[i]-'0';
+            int digitb = b[j]-'0';
+            int digitres = digita+digitb+carry;
+            tmp[index++] = digitres%2+'0';
+            carry = digitres/2;
+        }
+        while(i>=0) {
+            int digitres = a[i]-'0'+carry;
+            tmp[index++] = digitres%2+'0';
+            carry = digitres/2;
+            i--;
+        }
+        while(j>=0) {
+            int digitres =b[j]-'0'+carry;
+            tmp[index++] =digitres%2+'0';
+            carry = digitres/2;
+            j--;
+        }
+        if(carry ==0)
+            index--;
+        else
+            tmp[index]='1';
+        string res;
+        while(index>=0){
+            res +=tmp[index--];
+        }
+        return res;
+    }
+};

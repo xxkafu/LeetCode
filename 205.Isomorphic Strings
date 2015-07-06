@@ -1,0 +1,27 @@
+//solution:
+//easy
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        unordered_map<char,char> hashs;
+        unordered_map<char,char> hasht;
+        for(int i=0;i<s.size();i++){
+                if(hasht.find(t[i])!=hasht.end()){
+                    if(hasht[t[i]]==s[i])
+                        continue;
+                    else
+                        return false;
+                }
+                if(hashs.find(s[i])!=hashs.end()){
+                    if(hashs[s[i]]==t[i])
+                        continue;
+                    else
+                        return false;
+                }
+                    hasht[t[i]]=s[i];
+                    hashs[s[i]]=t[i];
+        }
+        return true;
+        
+    }
+};

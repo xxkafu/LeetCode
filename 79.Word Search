@@ -1,0 +1,37 @@
+class Solution {
+public:
+    bool exist(vector<vector<char> > &board, string word) {
+        if(word.size()==0)
+            return true;
+        vector<vector<bool> > hash(board.size(),vector<bool>(board[0].size(),true)) ;
+        int colSize = board[0].size();
+        int index=1;
+        for(int i= 0; i<board.size(); i++) {
+            for(int j=0; j<board[0].size(); j++) {
+                if(board[i][j] == word[0]) {
+                    if(helper(0,i,j,board,word,hash))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    bool helper(int index,int row, int col, vector<vector<char> > &board, string &word,vector<vector<bool>> &hash) {
+        int rowLimit = board.size();
+        int colLimit = board[0].size();
+        if(index == word.size())
+            return true;
+        if(row>=0&&row<rowLimit && col>=0&& col<colLimit) {
+            if(hash[row][col]== true && board[row][col] == word[index]) {
+                hash[row][col]= false;;
+                if(helper(index+1,row-1,col,board,word,hash)||helper(index+1,row+1,col,board,word,hash)
+                 ||helper(index+1,row,col-1,board,word,hash)||helper(index+1,row,col+1,board,word,hash))
+                    return true;
+                hash[row][col]=true;
+            }
+        }
+        return false;
+        
+    }
+};

@@ -1,0 +1,46 @@
+// solution:
+// easy
+/**
+ * Definition for singly-linked list with a random pointer.
+ * struct RandomListNode {
+ *     int label;
+ *     RandomListNode *next, *random;
+ *     RandomListNode(int x) : label(x), next(NULL), random(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    RandomListNode *copyRandomList(RandomListNode *head) {
+        if(head==NULL) 
+            return NULL;
+        RandomListNode* newHead=new RandomListNode(head->label);
+        unordered_map<RandomListNode*,RandomListNode*> hash;
+        hash[head]=newHead;
+        RandomListNode* ptr= head;
+        while(ptr!=NULL){
+            auto itr1=hash.find(ptr->next);
+            if(itr1==hash.end()){
+                if(ptr->next!=NULL){
+                    RandomListNode *newNode=new RandomListNode(ptr->next->label);
+                    hash[ptr->next]=newNode;
+                    hash[ptr]->next=newNode;
+                }
+            }
+            else
+                hash[ptr]->next=hash[ptr->next];
+            auto itr2=hash.find(ptr->random);
+            if(itr2==hash.end()){
+                if(ptr->random!=NULL){
+                    RandomListNode *newNode=new RandomListNode(ptr->random->label);
+                    hash[ptr->random]=newNode;
+                    hash[ptr]->random=newNode;
+                }
+            }
+            else
+                hash[ptr]->random=hash[ptr->random];
+            ptr=ptr->next;
+        }
+        return newHead;
+        
+    }
+};

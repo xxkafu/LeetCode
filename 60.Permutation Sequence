@@ -1,0 +1,31 @@
+class Solution {
+public:
+	string getPermutation(int n, int k) {
+		string res;
+		for (int i = 1; i <= n; i++) {
+			res += '0' + i;
+		}
+		vector<int> table(n, 1);
+		for (int i = 1; i<n; i++) {
+			table[n - 1 - i] = table[n - i] * (i + 1);
+		}
+
+		for (int i = 0; i<n - 1; i++) {
+			if (table[i] >= k&& table[i + 1]<k){
+				int times = k / table[i + 1];
+				int rem = k%table[i + 1];
+				if (rem == 0) {
+					swap(res[i], res[i + times - 1]);
+					sort(res.begin() + i + 1, res.end(), greater<char>());
+					break;
+				}
+				else {
+					swap(res[i], res[i + times]);
+					sort(res.begin() + i + 1, res.end());
+					k -= times*table[i + 1];
+				}
+			}
+		}
+		return res;
+	}
+};

@@ -1,0 +1,48 @@
+class Solution {
+public:
+    string simplifyPath(string path) {
+        vector<string> bottle;
+        string tmp;
+        for(int i=0; i<path.size(); i++) {
+            if(path[i]=='/') {
+                if(tmp.size()!=0){
+                    if(tmp==".")
+                        ;
+                    else
+                        if(tmp==".."){
+                            if(!bottle.empty())
+                                bottle.pop_back();
+                        }
+                        else
+                            bottle.push_back(tmp);
+                    tmp.clear();
+                }
+            }
+            else {
+                tmp +=path[i];
+            }
+        }
+
+        if(tmp.size()!=0){
+           if(tmp==".")
+                ;
+           else
+            if(tmp==".."){
+                if(!bottle.empty())
+                    bottle.pop_back();
+            }
+            else
+                bottle.push_back(tmp);
+           tmp.clear();
+        }
+        
+        string res;
+        for(int i=0; i<bottle.size();i++) {
+            res+="/"+bottle[i];
+        }
+        if(res.size()==0)
+            return "/";
+        else
+            return res;
+    }
+};

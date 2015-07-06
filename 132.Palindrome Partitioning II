@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int minCut(string s) {
+        const int size= s.size();
+        bool isPal[size][size];
+        int dp[size+1];
+        for(int i=0; i<size;i++){
+            dp[i]=INT_MAX;
+        }
+        dp[size]=-1;
+        for(int i=s.size()-1; i>=0; i--){
+            for(int j=i; j<s.size();j++){
+                if(i==j)
+                    isPal[i][j]= true;
+                else
+                    if(s[i]==s[j]&&(i+1==j||isPal[i+1][j-1]==true))
+                        isPal[i][j]=true;
+                    else
+                        isPal[i][j]=false;
+                if(isPal[i][j]==true)
+                    dp[i]=min(dp[i],1+dp[j+1]);
+            }
+        }
+        return dp[0];
+    }
+};

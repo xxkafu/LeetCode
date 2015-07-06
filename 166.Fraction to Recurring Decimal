@@ -1,0 +1,42 @@
+// easy
+class Solution {
+public:
+    string fractionToDecimal(int numerator, int denominator) {
+        string str;
+        if(1.0*numerator*denominator<0)
+            str.push_back('-');
+        size_t uFirst;
+        size_t uSecond;
+        uFirst=abs((long long )numerator);
+        uSecond= abs((long long)denominator);
+        
+        size_t intPart=uFirst/uSecond;
+        size_t fracPart =uFirst%uSecond;
+        str.append(to_string(intPart));
+        if(fracPart==0)
+            return str;
+        else
+            str.push_back('.');
+        unordered_map <size_t,int> hash;
+        while(fracPart!=0){
+            fracPart=fracPart*10;
+            if(hash.find(fracPart)==hash.end())
+                hash[fracPart]=str.size();
+            else{
+                str.insert(hash[fracPart],"(");
+                str.push_back(')');
+                return str;
+            }
+            if(fracPart<uSecond){
+                str.push_back('0');
+            }
+            else{
+                str.append(to_string(fracPart/uSecond));
+                fracPart%=uSecond;
+            }
+
+        }
+        return str;
+    }
+};
+

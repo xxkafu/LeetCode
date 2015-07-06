@@ -1,0 +1,95 @@
+//solution:
+//ÓÃmergesort
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        // determine the num
+        ListNode* tmp=head;
+        int listSize=0;
+        while(tmp!=NULL){
+            tmp=tmp->next;
+            listSize++;
+        }
+        // determine the loop time;
+        int halfLen= listSize/2;
+        if(listSize%2)
+            halfLen++;
+        int mergeLen=1;
+        while(mergeLen<halfLen){
+            mergeLen *=2;
+        }
+        ListNode* nullhead = new ListNode(-1);
+        nullhead->next = head;
+
+        for(int i=1; i<=mergeLen; i=i*2){
+            ListNode* l1head=nullhead->next;// the merge first list
+            ListNode* l2head=nullhead->next;// the merge second list
+            ListNode* oldend = nullhead;
+            while(l1head!=NULL){
+                ListNode* preL1=l1head;
+                ListNode* itrL1=preL1->next;
+                for(int j=1;j<i&&itrL1!=NULL;j++){
+                    preL1=preL1->next;
+                    itrL1 = itrL1->next;
+                }// find the l2head, l1end
+
+                l2head= itrL1;// l2 head find
+                if(l2head==NULL){
+                    oldend->next = l1head;
+                    break;
+                }
+                preL1->next=NULL;// l1 list formed
+
+                ListNode* preL2= l2head;
+                ListNode* itrL2=preL2->next;
+                for(int j=1;j<i&&itrL2!=NULL;j++){
+                    preL2=preL2->next;
+                    itrL2 = itrL2->next;
+                }// find the l2end ,and the new l1head
+
+                preL2->next=NULL;// l2 list formed
+                ListNode* newhead;
+                ListNode* newend;
+                mergeTwoLists(l1head,l2head,newhead,newend);
+                l1head=itrL2;// the l1 head updata
+                oldend->next=newhead;
+                oldend = newend;
+            }
+        }
+
+        return nullhead->next;
+    }
+    
+        void mergeTwoLists(ListNode *l1, ListNode *l2,ListNode* &newhead,ListNode* &newend) {
+        
+        if(l1->val>l2->val) {
+            swap(l1,l2);
+        }
+
+        ListNode *retList= l1;
+        while(l1->next!=NULL) {
+            if(l1->next->val<=l2->val) {
+                l1= l1->next;
+            }
+            else {
+                ListNode *tmp = l1->next;
+                l1->next = l2;
+                l2= tmp;
+                l1= l1->next;
+            }
+        }
+            l1->next = l2;
+            while(l2->next!=NULL)
+                l2=l2->next;
+            newhead = retList;
+            newend = l2;
+    }
+};

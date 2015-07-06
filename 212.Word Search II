@@ -1,0 +1,78 @@
+// solution:
+// 用Trie的方法，先根据words构建Trie，然后进行搜索即可，没有啥难度
+class node{
+public:
+	node(){
+		isWord = false;
+		for (int i = 0; i<26; i++){
+			child[i] = NULL;
+			cnt[i] = 0;
+		}
+	}
+	bool isWord;
+	node* child[26];
+	int   cnt[26];
+};
+
+class Trie{
+public:
+	Trie(){
+		root = new node();
+	}
+
+	void insert(string str){
+		node* ptr = root;
+		for (int i = 0; i<str.size(); i++){
+			if (ptr->child[str[i] - 'a'] == NULL)
+				ptr->child[str[i] - 'a'] = new node();
+			ptr->cnt[str[i] - 'a']++;
+			ptr = ptr->child[str[i] - 'a'];
+		}
+		ptr->isWord = true;
+	}
+
+	node* root;
+};
+
+class Solution {
+public:
+	Trie dict;
+	vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+		for (int i = 0; i<words.size(); i++){
+			dict.insert(words[i]);
+		}
+		vector<string> res;
+		string item;
+		for (int i = 0; i<board.size(); i++)
+			for (int j = 0; j<board[0].size(); j++){
+			helper(board, i, j, dict.root, res, item);
+			}
+
+		return res;
+	}
+	void helper(vector<vector<char> >&board, int rowIndex, int colIndex, node* ptr, vector<string>& res, string item){
+		char ch = board[rowIndex][colIndex];
+		if (ptr->child[ch - 'a'] == NULL)
+			return;
+		else{
+				item.push_back(ch);
+			board[rowIndex][colIndex] = 'X';
+			if (ptr->child[ch - 'a']->isWord){
+				res.push_back(item);
+				ptr->child[ch - 'a']->isWord = false;
+				//dict.delStr(item);
+			}
+			if (rowIndex + 1<board.size() && board[rowIndex + 1][colIndex] != 'X')
+				helper(board, rowIndex + 1, colIndex, ptr->child[ch - 'a'], res, item);
+			if (rowIndex - 1 >= 0 && board[rowIndex - 1][colIndex] != 'X')
+				helper(board, rowIndex - 1, colIndex, ptr->child[ch - 'a'], res, item);
+			if (colIndex + 1<board[0].size() && board[rowIndex][colIndex + 1] != 'X')
+				helper(board, rowIndex, colIndex + 1, ptr->child[ch - 'a'], res, item);
+			if (colIndex - 1 >= 0 && board[rowIndex][colIndex - 1] != 'X')
+				helper(board, rowIndex, colIndex - 1, ptr->child[ch - 'a'], res, item);
+			board[rowIndex][colIndex] = item.back();
+			item.pop_back();
+		}
+	}
+
+};

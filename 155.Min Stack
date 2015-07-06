@@ -1,0 +1,28 @@
+// solution:
+// easy
+class MinStack {
+public:
+    stack<int> nums;
+    stack<int> minBot;
+    void push(int x) {
+        nums.push(x);
+        if(minBot.empty()||x<=minBot.top())
+            minBot.push(x);
+    }
+
+    void pop() {
+        if(minBot.top()==nums.top()){
+            minBot.pop();
+        }
+        nums.pop();
+    }
+
+    int top() {
+        return nums.top();
+    }
+
+    int getMin() {
+        return minBot.top();
+    }
+};
+

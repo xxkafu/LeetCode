@@ -1,0 +1,22 @@
+//solution:
+//easy
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int left=0;
+        int right = nums.size()-1;
+        return helper(nums,left,right);
+    }
+    
+    int helper(vector<int>&nums,int left, int right){
+        if(left==right)
+            return nums[left];
+        if(left+1==right)
+            return min(nums[left],nums[right]);
+        if(nums[left]<nums[right])
+            return nums[left];
+        int minLeft=helper(nums,left,left+(right-left)/2);
+        int minRight=helper(nums,left+(right-left)/2,right);
+        return min(minLeft,minRight);
+    }
+};

@@ -1,0 +1,24 @@
+// solution: DP
+class Solution {
+public:
+    bool wordBreak(string s, unordered_set<string>& wordDict) {
+        vector<int> dp(s.size(),-1);//dp[i]: s[0:i] is wordbreak
+        
+        for(int i=0;i<s.size();i++){
+            if(wordDict.count(string(s,0,i+1))){
+                dp[i]=1;
+                continue;
+            }
+            for(int j=0;j<i;j++){
+                string sTmp(s,j+1,i-j);
+                if(wordDict.count(sTmp)&&dp[j]){
+                    dp[i] = 1;
+                    break;
+                }
+            }
+            if(dp[i]==-1)
+                dp[i]=0;
+        }
+        return dp.back();
+    }
+};

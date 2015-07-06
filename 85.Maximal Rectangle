@@ -1,0 +1,37 @@
+//this solution is solved by myself ,the complexity is O(m*n*m)
+//the better solution is O(m*n) , it's similar to the max rectangular
+class Solution {
+public:
+    int maximalRectangle(vector<vector<char> > &matrix) {
+        if(matrix.size()==0 || matrix[0].size()==0)
+            return 0;
+        vector<vector<int> > dp(matrix.size(),vector<int>(matrix[0].size(),0));
+        
+        for(int i =0; i<matrix.size();i++) {
+            for(int j=0; j<matrix[0].size(); j++) {
+                if(matrix[i][j]=='1') 
+                    dp[i][j] = (j==0 ?1:dp[i][j-1]+1); 
+                else
+                    dp[i][j]=0;
+            }
+        }
+        int res=0;
+        for(int i=0; i<matrix.size(); i++) {
+            for(int j=0; j<matrix[0].size();j++) {
+                if(matrix[i][j]!='0') {
+                    int minWid = dp[i][j];
+                    for(int k=i; k>=0;k--) {
+                        if(matrix[k][j]=='0')
+                            break;
+                        else {
+                            minWid = (minWid<dp[k][j] ? minWid: dp[k][j]);
+                            res =  (i-k+1)*minWid>res ? (i-k+1)*minWid:res; 
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+        
+    }
+};

@@ -1,0 +1,44 @@
+// 运用递归的方法，
+// 考虑什么时候回退：在所获得的值等于n,或者大于n，或者已经递归到9时，则需要将最
+// 后一个元素弹出，而原先倒数第二个元素+1,再次进行递归。
+// 接下来考虑前进，如果所获得的值<n，则还需要前进，如果此时已经达到个数，则最
+// 后一个元素累加，如果还没有达到个数，则加上比最后一个值大于1的数。
+class Solution {
+public:
+	vector<vector<int>> combinationSum3(int k, int n) {
+		int sum = 0;
+		vector<int> item;
+		for (int i = 1; i <= k; i++){
+			n -= i;
+			item.push_back(i);
+		}
+		vector<vector<int>> res;
+		helper(n, k, item, res);
+		return res;
+	}
+
+	void helper(int n, int k, vector<int> item, vector<vector<int>>& res){
+        if(n==0&&item.size()==k)// find the correct item
+            res.push_back(item);
+        if(n<=0 || item.back()+1>9){// deal the back 
+            n+=item.back();
+            item.pop_back();
+            if(item.empty())
+                return;
+            item.back()++;
+            n--;
+            helper(n,k,item,res);
+        }
+		else{ // deal the forward
+			if (item.size()<k){
+				item.push_back(item.back()+1);
+				n -= item.back();
+			}
+			else{
+				item.back()++;
+				n--;
+			}
+			helper(n, k, item, res);
+        }
+    }
+};

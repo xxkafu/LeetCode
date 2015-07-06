@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, unordered_set<string>& wordDict) {
+        unordered_set<string>begset,endset,*set1,*set2;
+        begset.insert(beginWord);
+        endset.insert(endWord);
+        int res=2, wordLen=beginWord.size();
+        while(!begset.empty()&&!endset.empty()){
+            if(begset.size()<=endset.size()){
+                set1 = &begset;
+                set2 = &endset;
+            }
+            else{
+                set1=&endset;
+                set2=&begset;
+            }
+            
+            unordered_set<string> item;
+            for(auto itr=set1->begin();itr!=set1->end();itr++){
+                string str=*itr;
+                for(int wordIndex=0; wordIndex<wordLen; wordIndex++){
+                    char orich=str[wordIndex];
+                    for(int ch='a';ch<='z';ch++){
+                        str[wordIndex]=ch;
+                        if(set2->find(str)!=set2->end())
+                            return res;
+                        else{
+                            if(wordDict.find(str)!=wordDict.end()){
+                                item.insert(str);
+                                wordDict.erase(str);
+                            }
+                        }
+                    }
+                    str[wordIndex]=orich;
+                }
+            }
+            swap(*set1,item);
+            res++;
+        }
+        return 0;
+    }
+};

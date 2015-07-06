@@ -1,0 +1,36 @@
+class Solution {
+public:
+
+    string multiply(string num1, string num2) {
+        int len1 = num1.size();
+        int len2 = num2.size();
+        
+        vector<int> mulres(len1+len2,0);
+        
+        for(int i=len1-1; i>=0; i--) {
+            int digit1 = num1[i]-'0';
+            int carry =0;
+            for(int j=len2-1; j>=0; j--) {
+                int digit2 = num2[j]-'0';
+                mulres[i+j+1] = mulres[i+j+1]+digit2*digit1+carry;
+                carry = mulres[i+j+1]/10;
+                mulres[i+j+1] = mulres[i+j+1]%10;
+            }
+            if(carry != 0) {
+                mulres[i] = carry;
+            }
+        }
+        
+        int firstDigit = 0;
+        while(firstDigit<len1+len2 && mulres[firstDigit] == 0)
+            firstDigit++;
+        
+        if(firstDigit==len1+len2)
+            return "0";
+        string res;
+        for(int k=firstDigit; k<len1+len2; k++) {
+            res +='0'+mulres[k];
+        }
+        return res;
+    }
+};

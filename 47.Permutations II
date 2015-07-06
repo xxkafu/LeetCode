@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<vector<int> > permuteUnique(vector<int> &num) {
+        vector<vector<int> > res;
+        res.push_back(num);
+        helper(num,0,res);
+        return res;
+    }
+    
+    void helper(vector<int> &num, int header, vector<vector<int> > &res) {
+        for(int i= header; i<num.size();i++) {
+            for(int j= i+1; j<num.size(); j++) {
+                if(canSwap(num,i,j)) {
+                    swap(num[i],num[j]);
+                    res.push_back(num);
+                    helper(num,i+1,res);
+                    swap(num[i],num[j]);
+                }
+            }
+        }
+    }
+    bool canSwap(vector<int> &num,int begin,int end) {
+        while(begin<end) {
+            if(num[begin]== num[end])
+                return false;
+            begin++;
+        }
+        return true;
+    }
+};

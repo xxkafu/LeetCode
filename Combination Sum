@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<vector<int> > combinationSum(vector<int> &candidates, int target) {
+        vector<vector<int> > res;
+        sort(candidates.begin(),candidates.end());
+        vector<int> item;
+        helper(candidates,0,target,res,item);
+        return res;
+    }
+    void helper(vector<int> &candidates,int start,int target, vector<vector<int> > &res, vector<int> &item) {
+        if(target<0)
+            return;
+        if(target==0) {
+            if(!item.empty())
+                res.push_back(item);
+            return;    
+        }
+        for(int index=start; index<candidates.size(); index++) {
+            if(target-candidates[index]<0)
+                break;
+            item.push_back(candidates[index]);
+            helper(candidates,index,target-candidates[index],res,item);
+            item.pop_back();
+        }
+            
+    }
+};

@@ -1,0 +1,22 @@
+//Solution:
+//运用递归，先把左括号全都写完，然后用右括号把左括号匹配好
+//运用递归，所以只有在左右括号都写完的时候，字符串才表示真正的结果，压入vector中
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> vReturn;
+        string strPush;
+        if(n ==0)
+            return vReturn;
+        generateOP(n,n,strPush,vReturn);    
+            return vReturn;
+    }
+    void generateOP(int nLeft,int nRight, string strPush,vector<string> &vReturn) {
+        if( nLeft != 0)
+              generateOP(nLeft-1,nRight,strPush+'(',vReturn);
+        if( nRight >nLeft)
+              generateOP(nLeft,nRight-1,strPush+')',vReturn);
+        if(nLeft == 0 && nRight == 0)
+            vReturn.push_back(strPush);
+    }
+};

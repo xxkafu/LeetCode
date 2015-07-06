@@ -1,0 +1,45 @@
+class Solution {
+public:
+    string minWindow(string S, string T) {
+        unordered_map<char, int> hash;
+        for(int i = 0; i<T.size(); i++) {
+            hash[T[i]]++;
+        }
+        
+        int left = 0; 
+        int right = S.size();
+        int leftTmp = 0;
+        int ownNum = 0; 
+        for(int i=0; i<S.size(); i++) {
+            if(hash.find(S[i])!=hash.end()) {
+                if(hash[S[i]]>0)
+                    ownNum++;
+                hash[S[i]]--;
+                while(ownNum == T.size()) {
+                    if(hash.find(S[leftTmp])!=hash.end()) {
+                        hash[S[leftTmp]]++;
+                        if(hash[S[leftTmp]]>0) {
+                            ownNum--;
+                            if(i-leftTmp<right-left) {
+                                right = i;
+                                left =leftTmp;
+                            }
+                        }
+                    }
+                    leftTmp++;
+                }
+            }
+        }
+        
+        string res;
+        if(right == S.size())
+            return res;
+        else {
+            for(int i = left; i<=right; i++) {
+                res +=S[i];
+            }
+            return res;
+        }
+    }
+        
+};

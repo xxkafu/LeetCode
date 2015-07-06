@@ -1,0 +1,27 @@
+// solution
+// easy
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        stack<int> valueBot;
+        for(int i=0; i<tokens.size();i++){
+            if(tokens[i]=="+"||tokens[i]=="-" ||tokens[i]=="*" ||tokens[i]=="/"){
+                 int a = valueBot.top();valueBot.pop();
+                 int b = valueBot.top();valueBot.pop();
+                 if(tokens[i]=="+")
+                     valueBot.push(a+b);
+                 if(tokens[i]=="-")
+                    valueBot.push(b-a);
+                 if(tokens[i]=="*")
+                    valueBot.push(b*a);
+                if(tokens[i]=="/")
+                    valueBot.push(b/a);
+                continue;
+            }
+            
+            valueBot.push(stoi(tokens[i]));
+        }
+        return valueBot.top();
+    }
+};
+

@@ -1,0 +1,49 @@
+class Solution {
+public:
+    vector<string> restoreIpAddresses(string s) {
+        vector<string> res;
+        string ipStr;
+        int end = 0;
+        int count = 0;
+        for(int newEnd = end+1; newEnd<end+4; newEnd++) {
+            helper(s,0,newEnd,0,ipStr,res);
+        }
+        return res;
+    }
+    
+    void helper(string &s,int begin, int end,int count, string ipStr, vector<string> &res) {
+        if(begin >= s.size() || end >= s.size()+1)
+            return;
+        string strTmp (s,begin,end-begin);
+        if(strValid(strTmp)) {
+            if(count == 3 && end == s.size()) {
+                    res.push_back(ipStr+strTmp);
+                    return;
+            }
+            else {
+                if(count<3) {
+                    ipStr +=strTmp+".";
+                    for(int newEnd = end+1; newEnd<end+4; newEnd++) {
+                        helper(s,end,newEnd,count+1,ipStr,res);
+                    }
+                }
+            }
+        }
+    }
+    bool strValid(const string &str) {
+        int num =stoi(str);
+        if(num >255)
+            return false;
+        else {
+            int length = 1;
+            while(num>9) {
+                num /=10;
+                length++;
+            }
+            if(length == str.size())
+                return true;
+            else
+                return false;
+        }
+    }
+};

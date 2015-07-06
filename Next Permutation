@@ -1,0 +1,23 @@
+class Solution {
+public:
+    void nextPermutation(vector<int> &num) {
+        if(num.size()<2)
+            return;
+        int index=num.size()-2;
+        while(index>=0) {
+            if(num[index]<num[index+1])
+                break;
+            index--;
+        }
+       if(index == -1)
+           sort(num.begin(),num.end());
+       else 
+           for(int i=num.size()-1; i>=0; i--) {
+               if(num[i]>num[index]) {
+                   swap(num[i],num[index]);
+                   sort(num.begin()+index+1,num.end());
+                   break;
+               }
+           }
+    }
+};

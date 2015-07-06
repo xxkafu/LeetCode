@@ -1,0 +1,22 @@
+class Solution {
+public:
+    vector<vector<int> > combine(int n, int k) {
+        vector<int> num;
+        vector<vector<int>> res;
+        helper(1,n,k,num,res);
+        return res;
+    }
+    
+    void helper(int digit, int n,int k, vector<int> &num, vector<vector<int> > &res) {
+        if(num.size() == k){
+                res.push_back(num);
+        }
+        else {
+            for(int i=digit; i<=n;i++) {
+                num.push_back(i);
+                helper(i+1,n,k,num,res);
+                num.pop_back();
+            }
+        }
+    }
+};

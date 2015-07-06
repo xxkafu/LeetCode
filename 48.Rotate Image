@@ -1,0 +1,25 @@
+class Solution {
+public:
+    void rotate(vector<vector<int> > &matrix) {
+        
+        rotateOP(matrix,0,matrix[0].size()-1);
+        
+    }
+    
+    void rotateOP(vector<vector<int> > &matrix, int nBegin ,int nEnd)
+    {
+        if(nBegin < nEnd)
+        {
+            for(int i= nBegin; i<nEnd; ++i)
+            {
+                int tmp = matrix[nBegin][i];
+                matrix[nBegin][i] = matrix[nEnd-(i-nBegin)][nBegin];
+                matrix[nEnd-(i-nBegin)][nBegin] = matrix[nEnd][nEnd-(i-nBegin)];
+                matrix[nEnd][nEnd-(i-nBegin)] = matrix[i][nEnd];
+                matrix[i][nEnd] = tmp;
+            }
+            rotateOP(matrix,nBegin+1,nEnd-1);
+        }
+    }
+    
+};

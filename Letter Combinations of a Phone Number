@@ -1,0 +1,22 @@
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        vector<string> reString;
+        string tmp(digits.size());
+        dfs(digits,0,tmp,reString);
+        return reString;
+    }
+
+    void dfs(string &digits, int index, string &tmp, vector<string>& reString)
+    {
+        string hash[]={"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+        if(index==digits.size())
+            reString.push_back(tmp);
+        else
+            for(int i=0; i<hash[digits[index]-'0'].size();i++){
+                tmp[index] = hash[digits[index]-'0'][i];
+                dfs(digits,index+1,tmp,reString);
+            }
+    }
+
+};

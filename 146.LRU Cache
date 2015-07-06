@@ -1,0 +1,49 @@
+//solution:
+//easy
+class LRUCache{
+public:
+    LRUCache(int capacity):capacity(capacity) {
+    }
+    
+    int get(int key) {
+        if(hash.find(key)==hash.end())
+            return -1;
+        else{
+            nodeList.splice(nodeList.begin(),nodeList,hash[key]);
+            hash[key]=nodeList.begin();
+            return nodeList.begin()->value;
+        }
+        
+        
+    }
+    
+    void set(int key, int value) {
+        if(hash.find(key)!=hash.end()){
+            nodeList.splice(nodeList.begin(),nodeList,hash[key]);
+            hash[key]=nodeList.begin();
+            nodeList.begin()->value=value;
+        }
+        else{
+            if(hash.size()<capacity){
+                nodeList.push_front(node(key,value));
+                hash[key]=nodeList.begin();
+            }
+            else{
+                hash.erase(nodeList.back().key);
+                nodeList.pop_back();
+                nodeList.push_front(node(key,value));
+                hash[key]=nodeList.begin();
+            }
+        }
+        
+    }
+    int capacity;
+    struct node{
+        int key;
+        int value;
+        node(int key,int value):key(key),value(value){};
+    };
+    list<node> nodeList;
+    unordered_map<int,list<node>::iterator> hash;
+};
+

@@ -1,0 +1,60 @@
+/**
+ * Definition for binary tree with next pointer.
+ * struct TreeLinkNode {
+ *  int val;
+ *  TreeLinkNode *left, *right, *next;
+ *  TreeLinkNode(int x) : val(x), left(NULL), right(NULL), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void connect(TreeLinkNode *root) {
+        TreeLinkNode *levelStart=root;
+        while(levelStart!=NULL){
+            TreeLinkNode* levelPtr=levelStart;
+            while(levelPtr!=NULL){
+                if(levelPtr->left==NULL&&levelPtr->right==NULL)
+                    levelPtr = levelPtr->next;
+                else{
+                    if(levelPtr->left!=NULL && levelPtr->right!=NULL){
+                        levelPtr->left->next=levelPtr->right;
+                        levelPtr=find(levelPtr->right,levelPtr->next);
+                    }
+                    else {
+                        TreeLinkNode* source=NULL;
+                        if(levelPtr->left==NULL)
+                            source = levelPtr->right;
+                        else
+                            source = levelPtr->left;
+                        levelPtr=find(source,levelPtr->next);
+                    }
+                }
+            }
+            while(levelStart!=NULL){
+                if(levelStart->left==NULL&&levelStart->right==NULL)
+                    levelStart= levelStart->next;
+                else{
+                    levelStart= levelStart->left?levelStart->left:levelStart->right;
+                    break;
+                }
+            }
+        }
+    }
+    
+    TreeLinkNode* find(TreeLinkNode* source, TreeLinkNode* ptrTmp){
+        while(ptrTmp!=NULL){
+           if(ptrTmp->left!=NULL){
+               source->next = ptrTmp->left;
+               break;
+           }
+           if(ptrTmp->right!=NULL){
+               source->next=ptrTmp->right;
+               break;
+           }
+           ptrTmp=ptrTmp->next;
+       }
+       return ptrTmp;
+        
+    }
+
+};

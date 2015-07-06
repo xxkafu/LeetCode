@@ -1,0 +1,51 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void recoverTree(TreeNode* root) {
+        TreeNode* current = root;
+        TreeNode* prePtr = NULL;
+        TreeNode* first=NULL;
+        TreeNode* second=NULL;
+        while(current!=NULL) {
+            if(current->left == NULL) {
+                if(prePtr!=NULL && prePtr->val>current->val) {
+                    if(first==NULL) 
+                        first = prePtr;
+                    second = current;
+                }
+                prePtr = current;
+                current = current->right;
+            }
+            else{
+                TreeNode* ptr = current->left;
+                while(ptr->right!=NULL && ptr->right!=current)
+                    ptr = ptr->right;
+                if(ptr->right == NULL) {
+                    ptr->right = current;
+                    current = current->left;
+                }
+                else {
+                    ptr->right =NULL;
+                    if(prePtr!=NULL && prePtr->val>current->val) {
+                        if(first==NULL) 
+                            first = prePtr;
+                        second = current;
+                    }
+                    prePtr = current;
+                    current = current->right;
+                }
+            }
+        }
+        int tmp = first->val;
+        first->val = second->val;
+        second->val = tmp; 
+    }
+};

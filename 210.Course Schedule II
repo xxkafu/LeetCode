@@ -1,0 +1,31 @@
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<pair<int, int>>& prerequisites) {
+        unordered_map<int,unordered_set<int>> post2pre;
+        unordered_map<int,unordered_set<int>> pre2post;
+        for(int i=0; i<prerequisites.size();i++){
+             post2pre[prerequisites[i].first].insert(prerequisites[i].second);
+             pre2post[prerequisites[i].second].insert(prerequisites[i].first);
+        }
+        queue<int> candidate;
+        for(int i=0;i<numCourses;i++){
+            if(post2pre.find(i)==post2pre.end())
+                candidate.push(i);
+        }
+        vector<int> res;
+        while(!candidate.empty()){
+            int num = candidate.front();
+            candidate.pop();
+            res.push_back(num);
+            for(auto itr1=pre2post[num].begin();itr1!=pre2post[num].end();itr1++){
+                    int post=*itr1;
+                    post2pre[post].erase(num);
+                    if(post2pre[post].size()==0)
+                        candidate.push(post); 
+            }
+        }
+        if(res.size()<numCourses)
+            return vector<int>();
+        return res;
+    }
+};

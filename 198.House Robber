@@ -1,0 +1,25 @@
+// solution
+// easy
+class Solution {
+public:
+    int rob(vector<int> &num) {
+        int size = num.size();
+        if(size == 0)
+            return 0;
+        if(size == 1)
+            return num[0];
+        if(size == 2)
+            return max(num[0],num[1]);
+        if(size>2) {
+            int a = num[0];
+            int b= max(num[0],num[1]);
+            for(int i=2; i<size;i++) {
+                 a = max(a+num[i],b);
+                 swap(a,b);
+            }
+            return max(a,b);
+        }
+        
+    }
+};
+

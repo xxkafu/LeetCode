@@ -1,0 +1,48 @@
+// solution:
+// 环问题一样，就是把其中一个首尾相连，看新形成的有无相交点
+//
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        if(headA==NULL|| headB==NULL)
+            return NULL;
+        ListNode* ptrA=headA;
+        while(ptrA->next!=NULL){
+            ptrA=ptrA->next;
+        }
+        ListNode* endA=ptrA;
+        endA->next = headA;
+        ListNode* fastB=headB->next;
+        ListNode* slowB=headB;
+        while(fastB!=slowB){
+            if(fastB==NULL)
+                break;
+            fastB=fastB->next;
+            slowB=slowB->next;
+            if(fastB==NULL)
+                break;
+            fastB=fastB->next;
+        }
+        // has intersection
+        ListNode* res=NULL;
+        if(fastB!=NULL){
+            slowB=slowB->next;
+            res=headB;
+            while(res!=slowB){
+                res=res->next;
+                slowB=slowB->next;
+            }
+        }
+        endA->next = NULL;
+        return res;
+    }
+};
+

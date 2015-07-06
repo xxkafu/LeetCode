@@ -1,0 +1,37 @@
+class Solution {
+public:
+    bool isMatch(const char *s, const char *p) {
+        bool ster = false;
+        const char *sterS= NULL;
+        const char *sterP= NULL;
+        while(*s != '\0') {
+            switch(*p) {
+                case '?': s++; p++;break;
+                case '*': while(*p == '*') {
+                                p++;
+                            }  
+                            ster = true;
+                             sterS=s;
+                             sterP=p;
+                             break;
+                default: if(*s == *p){
+                            s++;
+                            p++;
+                            } 
+                          else {
+                                if(!ster)
+                                    return false;
+                                else {
+                                    s=++sterS;
+                                    p = sterP;
+                                }
+                            }
+                            break;
+            }
+        }
+        while(*p=='*') {
+            p++;
+        }
+        return *p=='\0';
+    }
+};

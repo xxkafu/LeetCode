@@ -1,0 +1,43 @@
+class Solution {
+public:
+    string shortestPalindrome(string s) {
+        if(s.size()==0)
+            return string();
+        string strOdd;
+        // 将字符串处理成a#b#c这种格式，这样做的原因是
+        // 保证所得到的回文串是奇数的，方便处理
+        strOdd.push_back(s[0]);
+        for(int i=1;i<s.size();i++){
+            strOdd.push_back('#');
+            strOdd.push_back(s[i]);
+        }
+        // strOdd is get;
+        int resIndex=0;
+        int coverLimitRight=0;//回文串的最右字符（exclusive）
+        int midNum=-1;// 回文字符串的中心
+        vector<int> dp(strOdd.size());// 用来表示每个字符所得到的回文串长
+        for(int i=0; i<strOdd.size()/2+1;i++){//只需要判断一半的字符，因为如果超过一半，则不可能回文串到字符串的左边界
+            int indexTmp=i;
+            int j=1;
+            if(indexTmp<coverLimitRight)// 如果所要处理的字符包含在某个回文串中，则可以获得一部分信息
+                j=min(dp[2*midNum-indexTmp],coverLimitRight-indexTmp);//根据已有信息更新j
+            while(indexTmp-j>=0&&indexTmp+j<strOdd.size()){//自己更新j的值
+                if(strOdd[indexTmp+j]==strOdd[indexTmp-j])
+                    j++;
+                else
+                    break;
+            }
+            dp[indexTmp]=j;//得到字符strodd[indexTmp]的回文串长
+            if(j+indexTmp>coverLimitRight){//更新新的最右字符和其对应的中点,尽量是后续dp值的确定能够利用之前的dp值
+                midNum=indexTmp;
+                coverLimitRight=indexTmp+j;// the index is not guantee
+            }
+            if(indexTmp-j<0)//如果这次的回文串到了最左边，则可以在头部加字符使原先的字符串构成回文
+                resIndex=indexTmp;
+        }
+        string res;
+        for(int i=s.size()-1;i>resIndex;i--)
+            res.push_back(s[i]);
+        return res+s;
+    }
+};

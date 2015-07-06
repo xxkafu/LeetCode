@@ -1,0 +1,57 @@
+//SOLUTION:
+//根据最大值和最小值的差值，如果该差值大于nums.size()，则必然存在空隙
+//则初步设桶的个数为nums.size(),最后根据能否除尽，来增加一个桶与否
+//如果最大最小值之间的差值，如果该差值小于nums.size(),则将桶的大小设置成为二者的差值
+//
+class Solution {
+public:
+	int maximumGap(vector<int>& nums) {
+		if (nums.size()<2)
+			return 0;
+		int minNum = nums[0];
+		int maxNum = nums[0];
+		int size = nums.size();
+		for (int i = 0; i<size; i++){
+			if (nums[i]<minNum)
+				minNum = nums[i];
+			if (nums[i]>maxNum)
+				maxNum = nums[i];
+		}
+		int sizeTmp = min(maxNum - minNum + 1, size);//预处理桶的个数
+		int itemSize = (maxNum - minNum + 1) / sizeTmp;//确定桶的大小,往小值取，保证最大间距发生在桶之间，而不是在桶内
+
+		int bucketSize = (maxNum - minNum + 1) / itemSize;
+		if ((maxNum - minNum + 1) % itemSize)
+			bucketSize++;//确定桶的个数,并自然的保证第一个桶和最后一个桶内必然存在数
+
+		vector<vector<int>> buckets(bucketSize);// 桶内的min,max
+
+		for (int i = 0; i<size; i++){
+			int index = (nums[i] - minNum) / itemSize;
+			if (buckets[index].size() == 0){
+				buckets[index].push_back(nums[i]);
+				buckets[index].push_back(nums[i]);
+			}
+			else{
+				if (nums[i]<buckets[index][0])
+					buckets[index][0] = nums[i];
+				if (nums[i]>buckets[index][1])
+					buckets[index][1] = nums[i];
+			}
+		}
+		int res = 0;
+		int bigger = buckets.back()[0];
+		for (int i = bucketSize - 2; i >= 0; i--){
+			if (buckets[i].empty())
+				continue;
+			else{
+				if (res < bigger - buckets[i][1]) {
+					res = bigger - buckets[i][1];
+				}
+				bigger = buckets[i][0];
+			}
+		}
+
+		return res;
+	}
+};

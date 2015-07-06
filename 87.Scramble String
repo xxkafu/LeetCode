@@ -1,0 +1,114 @@
+// my own solution ,Recursive code
+class Solution {
+public:
+    bool isScramble(string s1, string s2) {
+        int s1begin =0;
+        int s1end = s1.size();
+        int s2begin = 0;
+        int s2end = s2.size();
+        return helper(s1,s1begin,s1end,s2,s2begin,s2end);
+        
+    }
+    
+    bool helper(string s1,int s1begin, int s1end, string s2, int s2begin, int s2end)
+    {
+        string s1Tmp  = s1;
+        string s2Tmp = s2;
+        sort(s1Tmp.begin()+s1begin,s1Tmp.begin()+s1end);
+        sort(s2Tmp.begin()+s2begin,s2Tmp.begin()+s2end);
+		int nResult = s1Tmp.compare(s1begin,s1end-s1begin,s2Tmp,s2begin,s2end-s2begin);
+		if(nResult ==0)
+        {
+            if(s1end-s1begin <= 3)
+                return true;
+            else
+                {
+                    for(int i = 1; i<(s1end-s1begin); i++ )
+                    {
+                        if(helper(s1,s1begin,s1begin+i,s2,s2begin,s2begin+i) )
+                        {
+                            if (helper(s1,s1begin+i, s1end, s2, s2begin+i, s2end) )
+                                return true;
+						}
+						if(helper(s1,s1begin,s1begin+i,s2,s2end-i,s2end) )
+						{
+							if(helper(s1,s1begin+i,s1end,s2,s2begin,s2end-i))
+								return true;;
+						}
+                            
+					}
+					return false;
+				}
+		} 
+        else
+            return false;
+        
+    }
+        
+};
+
+
+// the more elegant solution: recursive
+class Solution {
+public:
+    bool isScramble(string s1, string s2) {
+        return isScrambleRecur(s1,s2);
+    }
+    bool isScrambleRecur(string &s1, string &s2)
+    {
+        string s1cop = s1, s2cop = s2;
+        sort(s1cop.begin(), s1cop.end());
+        sort(s2cop.begin(), s2cop.end());
+        if(s1cop != s2cop)return false;//两个字符串所含字母不同
+        if(s1 == s2)return true;
+        
+        int len = s1.size();
+        for(int i = 1; i < len; i++)//分割位置
+        {
+            string s1left = s1.substr(0, i);
+            string s1right = s1.substr(i);
+            string s2left = s2.substr(0, i);
+            string s2right = s2.substr(i);
+            if(isScrambleRecur(s1left, s2left) && isScrambleRecur(s1right, s2right))
+                return true;
+            s2left = s2.substr(0, len-i);
+            s2right = s2.substr(len-i);
+            if(isScrambleRecur(s1left, s2right) && isScrambleRecur(s1right, s2left))
+                return true;
+        }
+        return false;
+    }
+};
+
+// dp solution
+class Solution {
+public:
+    bool isScramble(string s1, string s2) {
+        if(s1.size()==0)
+            return true;
+        const int size = s1.size();
+        bool dp[size][size][size];
+        
+        for(int i=0; i<s1.size();i++) {
+            for(int j=0; j<s2.size(); j++) {
+                dp[0][i][j] = (s1[i] == s2[j]);
+            }
+        }
+        
+        for(int len =2; len<=s1.size();len++) {
+            for(int i=0; i<s1.size()-len+1; i++) {
+                for(int j=0; j<s2.size()-len+1; j++) {
+                    dp[len-1][i][j]=false;
+                    for(int k=1;k<len; k++) {
+                        dp[len-1][i][j] =dp[len-1][i][j] || (dp[k-1][i][j] && dp[len-k-1][i+k][j+k])
+                                                        ||(dp[k-1][i][j+len-k] &&dp[len-k-1][i+k][j]);
+                    }
+                }
+            }
+        }
+        
+        return dp[s1.size()-1][0][0];
+        
+        
+    }
+};

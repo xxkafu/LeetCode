@@ -1,0 +1,49 @@
+//solution
+//this is solved by myself and the running time is short ,so I doesn't spend
+//much time on the Internet to find the faster solution. and the general thought 
+//is similar
+//
+class Solution {
+public:
+    vector<vector<int> > threeSum(vector<int> &num) {
+
+        vector<int> triple(3);
+        vector<vector<int> > matchVector;
+        sort(num.begin(),num.end());//
+
+        for(int i= 0; i<num.size(); i++) {
+            if(i==0 || num[i]!=num[i-1]) {//make the first elemment of triple is unique
+                int firstElement = num[i];
+                int begin = i+1; // determine the second element's start point
+                int end = num.size()-1;// determint the third element's end point
+                while(begin <end) {// 
+                    if(num[begin]+num[end] == -firstElement) {
+                        triple[0] = firstElement;
+                        triple[1] = num[begin];
+                        triple[2] = num[end];
+                        matchVector.push_back(triple);
+                        while(begin<end && num[begin+1] == num[begin])// find the unique second element
+                                begin++;
+                                begin++;// locate the second element
+                        while(begin<end && num[end-1] == num[end]) // find the unique third element
+                                end--;
+                                end--;// locate the third element
+                    }
+                    else
+                        if(num[begin]+num[end]<-firstElement) {
+                           while(begin<end && num[begin+1] == num[begin]) 
+                               begin++;
+                               begin++;
+                        }
+                        else  {
+                            while(begin<end && num[end-1] == num[end])
+                                end--;
+                                end--;
+                        }
+                            
+                }
+        }
+        }
+        return matchVector;
+    }
+};

@@ -1,0 +1,14 @@
+class Solution {
+public:
+    bool canJump(int A[], int n) {
+        int maxIndex =0;
+        for(int i=0; i<n; i++) {
+            if(i>maxIndex)
+                return false;
+            if(i+A[i]>maxIndex)
+                maxIndex = i+A[i];
+        }
+        return true;
+        
+    }
+};

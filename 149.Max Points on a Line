@@ -1,0 +1,44 @@
+// solution:
+// 根据斜率进行hash操作，同一个点，同一个斜率的是在同一条直线上的
+/**
+ * Definition for a point.
+ * struct Point {
+ *     int x;
+ *     int y;
+ *     Point() : x(0), y(0) {}
+ *     Point(int a, int b) : x(a), y(b) {}
+ * };
+ */
+class Solution {
+public:
+    int maxPoints(vector<Point>& points) {
+        int res=0;
+        for(int i=0; i<points.size();i++){
+            unordered_map<double,int> hash;
+            int undefK = 0;
+            int dupPoint=1;
+            for(int j=0;j<points.size();j++){
+                if(i==j)
+                    continue;
+                if(points[i].y==points[j].y&&points[i].x==points[j].x){
+                    dupPoint++;
+                    continue;
+                }
+                if(points[i].x==points[j].x)
+                    undefK++;
+                else{
+                    double k=(double)(points[j].y-points[i].y)/(points[j].x-points[i].x);
+                    hash[k]++;
+                }
+            }
+            for(auto itr=hash.begin();itr!=hash.end();itr++){
+                if(res<itr->second+dupPoint)
+                    res = itr->second+dupPoint;
+            }
+            if(res<undefK+dupPoint)
+                res = undefK+dupPoint;
+        }
+        return res;
+        
+    }
+};
